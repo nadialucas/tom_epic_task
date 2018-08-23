@@ -40,26 +40,9 @@ hsdrop8 no_hs_diploma8 ba_or_better8 unemprt8 povrat8 welfare8 avhhin8 tothsun8
 ownocc8 occupied80 ;
 #delimit cr
 
+
 // Create a balance table
-
-bcheck(
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+cd "$hbpdir/Build"
+balancetable npl2000 `price_control' `house_controls' `economic_controls' using "balance_table.tex", replace ctitles("Not NPL" "NPL" "Difference")
 
 
