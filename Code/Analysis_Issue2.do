@@ -9,7 +9,7 @@ if c(username) == "Tom Bearpark" {
 	}
 else if c(username) == "nadialucas" {
     global dbdir = "/Users/nadialucas/Dropbox/epic_task_nadia/tom"
-    global hbpdir = "/Users/nadialucas/"
+    global hbpdir = "/Users/nadialucas/Documents/tom_epic_task"
 }
 
 // Input and output directories
@@ -19,7 +19,7 @@ global logdir = "$codedir/Logfiles"
 
 // Create a plain text log file to record output
 // Log file has same name as do-file
-log using "$logdir/Analysis.txt", replace text
+*log using "$logdir/Analysis.txt", replace text
 
 cd "$outdir"
 
