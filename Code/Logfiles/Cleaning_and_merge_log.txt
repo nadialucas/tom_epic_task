@@ -1,0 +1,112 @@
+-----------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\Tom Bearpark\Documents\Data_Task\tom_epic_task/Code/Logfiles/Cleaning_and_merge_log.txt
+  log type:  text
+ opened on:  22 Aug 2018, 19:57:58
+
+. 
+. cd "$dbdir/RawData"
+C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom\RawData
+
+. 
+. local list : dir . files "*.txt"
+
+. foreach f of local list {
+  2.         di "`f'"
+  3.         import delimited "`f'" , varnames(1)
+  4.         save "$outdir/`f'.dta", replace
+  5.         clear
+  6.         } 
+demographics.txt
+(81 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/demographics.txt.dta saved
+house_age1.txt
+(172 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age1.txt.dta saved
+house_age2.txt
+(69 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age2.txt.dta saved
+house_chars1.txt
+(78 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_chars1.txt.dta saved
+house_chars2.txt
+(145 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_chars2.txt.dta saved
+
+. 
+. cd "$dbdir/IntermediateData"
+C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom\IntermediateData
+
+.         
+. use "demographics.txt.dta", clear
+
+. 
+. merge 1:1 fips using "house_age1.txt.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            65,430  (_merge==3)
+    -----------------------------------------
+
+. drop _m
+
+. merge 1:1 fips using "house_age2.txt.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            65,430  (_merge==3)
+    -----------------------------------------
+
+. drop _m
+
+. merge 1:1 fips using "house_chars1.txt.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            65,430  (_merge==3)
+    -----------------------------------------
+
+. drop _m
+
+. merge 1:1 fips using "house_chars2.txt.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            65,430  (_merge==3)
+    -----------------------------------------
+
+. drop _m
+
+. 
+. gen dividedfips = fips/(10)^8
+
+. gen statefips = string(dividedfips)
+
+. replace statefips = substr(statefips,1,2)
+(65,429 real changes made)
+
+. destring statefips, replace
+statefips: all characters numeric; replaced as byte
+
+. drop dividedfips
+
+. 
+. 
+. save "$dbdir/IntermediateData/superfund_sample.dta", replace
+(note: file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/superfund_sample.dta not found)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/superfund_sample.dta saved
+
+. 
+end of do-file
+
+. do "C:\Users\TOMBEA~1\AppData\Local\Temp\STD2664_000000.tmp"
+
+. clear all 
+
+. set more off 
+
+. capture log close 
