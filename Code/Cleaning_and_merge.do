@@ -43,6 +43,9 @@ merge 1:1 fips using "house_chars1.txt.dta"
 drop _m
 merge 1:1 fips using "house_chars2.txt.dta"
 drop _m
+merge 1:1 fips using "sample82.txt.dta"
+drop _m
+
 
 gen dividedfips = fips/(10)^8
 gen statefips = string(dividedfips)

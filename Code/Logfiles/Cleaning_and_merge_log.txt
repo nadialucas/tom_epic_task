@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  C:\Users\Tom Bearpark\Documents\Data_Task\tom_epic_task/Code/Logfiles/Cleaning_and_merge_log.txt
   log type:  text
- opened on:  22 Aug 2018, 19:57:58
+ opened on:  23 Aug 2018, 13:04:18
 
 . 
 . cd "$dbdir/RawData"
@@ -20,9 +20,16 @@ C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom\RawData
 demographics.txt
 (81 vars, 65,430 obs)
 file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/demographics.txt.dta saved
+house_age1 (1).txt
+(172 vars, 65,430 obs)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age1 (1).txt.dta saved
 house_age1.txt
 (172 vars, 65,430 obs)
 file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age1.txt.dta saved
+house_age2 (1).txt
+(69 vars, 65,430 obs)
+(note: file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age2 (1).txt.dta not found)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age2 (1).txt.dta saved
 house_age2.txt
 (69 vars, 65,430 obs)
 file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_age2.txt.dta saved
@@ -32,6 +39,10 @@ file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_ch
 house_chars2.txt
 (145 vars, 65,430 obs)
 file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/house_chars2.txt.dta saved
+sample82.txt
+(12 vars, 409 obs)
+(note: file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/sample82.txt.dta not found)
+file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/sample82.txt.dta saved
 
 . 
 . cd "$dbdir/IntermediateData"
@@ -81,6 +92,20 @@ C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom\IntermediateData
 
 . drop _m
 
+. merge 1:1 fips using "sample82.txt.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        65,021
+        from master                    65,021  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                               409  (_merge==3)
+    -----------------------------------------
+
+. drop _m
+
+. 
 . 
 . gen dividedfips = fips/(10)^8
 
@@ -97,13 +122,12 @@ statefips: all characters numeric; replaced as byte
 . 
 . 
 . save "$dbdir/IntermediateData/superfund_sample.dta", replace
-(note: file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/superfund_sample.dta not found)
 file C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom/IntermediateData/superfund_sample.dta saved
 
 . 
 end of do-file
 
-. do "C:\Users\TOMBEA~1\AppData\Local\Temp\STD2664_000000.tmp"
+. do "C:\Users\TOMBEA~1\AppData\Local\Temp\STD465c_000000.tmp"
 
 . clear all 
 

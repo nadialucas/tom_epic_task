@@ -13,7 +13,7 @@ elif getpass.getuser()=="Tom Bearpark":
 	chromedriver_path = r"C:/Users/Tom Bearpark/.anaconda/chromedriver"
 
 
-files = ["demographics.txt","house_age.txt","house_chars1.txt","house_chars2.txt","house_type.txt"]
+files = ["demographics.txt","house_age.txt","house_chars1.txt","house_chars2.txt","house_type.txt", "sample82.txt"]
 data_url = "http://www.jasmiths.com/data_project"
 driverObj = ChromeDriver(file_folder, chromedriver_path, files, data_url)
 driverObj.get_data()
