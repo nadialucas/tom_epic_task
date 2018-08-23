@@ -1,0 +1,167 @@
+-----------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\Tom Bearpark\Documents\Data_Task\tom_epic_task/Code/Logfiles/Analysis.txt
+  log type:  text
+ opened on:  22 Aug 2018, 21:55:52
+
+. 
+. cd "$outdir"
+C:\Users\Tom Bearpark\Dropbox\epic_task_nadia\tom\IntermediateData
+
+. 
+. use superfund_sample, replace
+
+. 
+. /* Want to measure impact of Superfund cleanup on local housing prices.
+> Want to observe the relationship between a locale's 2000 log median house prices 
+> (which I'll now call lnmdvalhs0) and its NPL status in 2000 (npl2000).*/
+. 
+. local price_control lnmeanhs8
+
+. 
+. #delimit;
+delimiter now ;
+. local house_controls firestoveheat80 noaircond80 nofullkitchen80 zerofullbath80 
+>         bedrms0_80occ bedrms1_80occ bedrms2_80occ bedrms3_80occ bedrms4_80occ 
+>         bedrms5_80occ blt0_1yrs80occ blt2_5yrs80occ blt6_10yrs80occ blt10_20yrs80occ 
+>         blt20_30yrs80occ blt30_40yrs80occ blt40_yrs80occ detach80occ mobile80occ ;
+
+. #delimit cr
+delimiter now cr
+.         
+. #delimit;
+delimiter now ;
+. local economic_controls pop_den8 shrblk8 shrhsp8 child8 old8 shrfor8 ffh8 smhse8 
+> hsdrop8 no_hs_diploma8 ba_or_better8 unemprt8 povrat8 welfare8 avhhin8 tothsun8 
+> ownocc8 occupied80 ;
+
+. #delimit cr
+delimiter now cr
+.         
+. // 1. Regress lnmdvalhs0 onto npl2000, using a price control
+. 
+. reg lnmdvalhs0 npl2000 `price_control', r
+
+Linear regression                               Number of obs     =     42,457
+                                                F(2, 42454)       =    2741.98
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.5793
+                                                Root MSE          =     .40559
+
+------------------------------------------------------------------------------
+             |               Robust
+  lnmdvalhs0 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     npl2000 |   .0305541   .0127793     2.39   0.017     .0055064    .0556017
+   lnmeanhs8 |   .8560646   .0115602    74.05   0.000     .8334064    .8787228
+       _cons |   2.400974   .1251048    19.19   0.000     2.155766    2.646182
+------------------------------------------------------------------------------
+
+. est sto m1
+
+. // 2. Regress lnmdvalhs0 onto npl2000, using price and house controls
+. 
+. reg lnmdvalhs0 npl2000 `price_control' `house_controls', r
+note: bedrms0_80occ omitted because of collinearity
+note: blt2_5yrs80occ omitted because of collinearity
+
+Linear regression                               Number of obs     =     42,457
+                                                F(19, 42437)      =    1838.93
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.6479
+                                                Root MSE          =      .3711
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      lnmdvalhs0 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+         npl2000 |   .0333976   .0124092     2.69   0.007     .0090754    .0577198
+       lnmeanhs8 |   .8611455   .0180729    47.65   0.000     .8257224    .8965687
+ firestoveheat80 |  -.0284337   .0197724    -1.44   0.150     -.067188    .0103206
+     noaircond80 |   .3200877   .0074067    43.22   0.000     .3055704     .334605
+ nofullkitchen80 |  -1.681069    .170281    -9.87   0.000    -2.014823   -1.347315
+  zerofullbath80 |   .7002544   .1368532     5.12   0.000     .4320195    .9684893
+   bedrms0_80occ |          0  (omitted)
+   bedrms1_80occ |   .2795856   .2412161     1.16   0.246    -.1932028    .7523739
+   bedrms2_80occ |  -.3397603   .2212274    -1.54   0.125    -.7733705    .0938499
+   bedrms3_80occ |  -.3965938   .2235347    -1.77   0.076    -.8347263    .0415386
+   bedrms4_80occ |   .0522771   .2192274     0.24   0.812    -.3774129    .4819671
+   bedrms5_80occ |   .6547291   .2243212     2.92   0.004     .2150552    1.094403
+  blt0_1yrs80occ |   .0127219   .0514124     0.25   0.805    -.0880473    .1134912
+  blt2_5yrs80occ |          0  (omitted)
+ blt6_10yrs80occ |   .0368179   .0338673     1.09   0.277    -.0295627    .1031985
+blt10_20yrs80occ |   .0918566   .0237528     3.87   0.000     .0453006    .1384127
+blt20_30yrs80occ |   .1608371   .0236327     6.81   0.000     .1145165    .2071576
+blt30_40yrs80occ |   .0864772   .0320795     2.70   0.007     .0236008    .1493536
+  blt40_yrs80occ |   .1603658   .0300687     5.33   0.000     .1014305    .2193011
+     detach80occ |  -.2679615   .0134376   -19.94   0.000    -.2942994   -.2416236
+     mobile80occ |  -.2707551   .0277292    -9.76   0.000    -.3251049   -.2164053
+           _cons |   2.602899   .3367879     7.73   0.000     1.942788     3.26301
+----------------------------------------------------------------------------------
+
+. est sto m2
+
+. // 3. Regress lnmdvalhs0 onto npl2000, using price, house, and economic controls
+. 
+. reg lnmdvalhs0 npl2000 `price_control' `house_controls' `economic_controls', r
+note: bedrms0_80occ omitted because of collinearity
+note: blt2_5yrs80occ omitted because of collinearity
+
+Linear regression                               Number of obs     =     42,457
+                                                F(37, 42419)      =    2439.05
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.7285
+                                                Root MSE          =     .32595
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      lnmdvalhs0 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+         npl2000 |   .0930937   .0110184     8.45   0.000     .0714973      .11469
+       lnmeanhs8 |   .5598753   .0198614    28.19   0.000     .5209465    .5988041
+ firestoveheat80 |   -.020401   .0211488    -0.96   0.335     -.061853     .021051
+     noaircond80 |   .4367953   .0088953    49.10   0.000     .4193603    .4542302
+ nofullkitchen80 |  -.5949371   .1567052    -3.80   0.000    -.9020824   -.2877919
+  zerofullbath80 |   .5458716   .1229911     4.44   0.000     .3048066    .7869367
+   bedrms0_80occ |          0  (omitted)
+   bedrms1_80occ |   .5041521   .2423372     2.08   0.037     .0291663    .9791378
+   bedrms2_80occ |   .2927201   .2214389     1.32   0.186    -.1413045    .7267448
+   bedrms3_80occ |   .1580495   .2220555     0.71   0.477    -.2771838    .5932827
+   bedrms4_80occ |   .2350997   .2226936     1.06   0.291    -.2013842    .6715836
+   bedrms5_80occ |    .725437   .2275634     3.19   0.001     .2794082    1.171466
+  blt0_1yrs80occ |   .0251553   .0545116     0.46   0.644    -.0816884    .1319991
+  blt2_5yrs80occ |          0  (omitted)
+ blt6_10yrs80occ |  -.0594048   .0323678    -1.84   0.066    -.1228463    .0040366
+blt10_20yrs80occ |  -.1188762   .0250465    -4.75   0.000    -.1679678   -.0697846
+blt20_30yrs80occ |  -.1669127   .0263983    -6.32   0.000    -.2186538   -.1151716
+blt30_40yrs80occ |  -.1536773   .0312824    -4.91   0.000    -.2149914   -.0923631
+  blt40_yrs80occ |  -.1643478   .0283433    -5.80   0.000    -.2199013   -.1087943
+     detach80occ |  -.0121092   .0137137    -0.88   0.377    -.0389884      .01477
+     mobile80occ |   .2697323   .0265002    10.18   0.000     .2177914    .3216733
+        pop_den8 |   7.17e-06   3.91e-07    18.35   0.000     6.40e-06    7.93e-06
+         shrblk8 |  -.1019965   .0133398    -7.65   0.000    -.1281428   -.0758502
+         shrhsp8 |   -.279865   .0200981   -13.92   0.000    -.3192577   -.2404724
+          child8 |  -.6038818   .0567007   -10.65   0.000    -.7150162   -.4927474
+            old8 |  -.3930812   .0458695    -8.57   0.000    -.4829863   -.3031761
+         shrfor8 |    1.25222   .0438802    28.54   0.000     1.166214    1.338226
+            ffh8 |  -.0570592   .0342483    -1.67   0.096    -.1241866    .0100682
+          smhse8 |   .4072666   .0228936    17.79   0.000     .3623948    .4521385
+         hsdrop8 |   .0225749   .0247707     0.91   0.362    -.0259761    .0711259
+  no_hs_diploma8 |   -.295008   .0348192    -8.47   0.000    -.3632543   -.2267618
+   ba_or_better8 |   .4538059   .0337897    13.43   0.000     .3875773    .5200344
+        unemprt8 |  -1.249583   .0732439   -17.06   0.000    -1.393143   -1.106023
+         povrat8 |  -.3307308   .0504514    -6.56   0.000    -.4296165   -.2318451
+        welfare8 |   .8765389   .0672648    13.03   0.000     .7446986    1.008379
+         avhhin8 |   .0000134   7.00e-07    19.13   0.000      .000012    .0000148
+        tothsun8 |   .0000305   4.26e-06     7.16   0.000     .0000222    .0000389
+         ownocc8 |  -.0000944   9.01e-06   -10.47   0.000     -.000112   -.0000767
+      occupied80 |    .119046    .044842     2.65   0.008     .0311547    .2069373
+           _cons |   4.921471   .3218606    15.29   0.000     4.290618    5.552324
+----------------------------------------------------------------------------------
+
+. est sto m3
+
+. /* 4. Lastly, regress lnmdvalhs0 onto npl2000, using price, house, 
+>                 and economic controls. Use a statefips fixed effect.*/
+. 
+. reghdfe lnmdvalhs0 npl2000  `price_control' `house_controls' `economic_controls' , absorb(statefips) 
