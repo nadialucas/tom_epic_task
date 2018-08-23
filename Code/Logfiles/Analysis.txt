@@ -165,3 +165,99 @@ blt30_40yrs80occ |  -.1536773   .0312824    -4.91   0.000    -.2149914   -.09236
 >                 and economic controls. Use a statefips fixed effect.*/
 . 
 . reghdfe lnmdvalhs0 npl2000  `price_control' `house_controls' `economic_controls' , absorb(statefips) 
+(MWFE estimator converged in 1 iterations)
+note: bedrms5_80occ omitted because of collinearity
+note: blt40_yrs80occ omitted because of collinearity
+
+HDFE Linear regression                            Number of obs   =     42,457
+Absorbing 1 HDFE group                            F(  37,  42371) =    2496.98
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7752
+                                                  Adj R-squared   =     0.7748
+                                                  Within R-sq.    =     0.6856
+                                                  Root MSE        =     0.2967
+
+----------------------------------------------------------------------------------
+      lnmdvalhs0 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+         npl2000 |   .0855822   .0106196     8.06   0.000     .0647676    .1063967
+       lnmeanhs8 |   .5024508   .0049347   101.82   0.000     .4927787     .512123
+ firestoveheat80 |   .0573159   .0309887     1.85   0.064    -.0034226    .1180544
+     noaircond80 |   .3339413   .0085314    39.14   0.000     .3172196    .3506631
+ nofullkitchen80 |  -.5731115    .095373    -6.01   0.000    -.7600445   -.3861785
+  zerofullbath80 |   .6274548   .0804284     7.80   0.000     .4698136     .785096
+   bedrms0_80occ |  -.4061192   .1279975    -3.17   0.002    -.6569969   -.1552414
+   bedrms1_80occ |  -.1319811   .0494423    -2.67   0.008    -.2288889   -.0350732
+   bedrms2_80occ |   -.397366   .0396681   -10.02   0.000    -.4751163   -.3196157
+   bedrms3_80occ |  -.4558152   .0388683   -11.73   0.000    -.5319979   -.3796326
+   bedrms4_80occ |  -.4339223   .0464693    -9.34   0.000    -.5250031   -.3428415
+   bedrms5_80occ |          0  (omitted)
+  blt0_1yrs80occ |   .2098569   .0347553     6.04   0.000     .1417358    .2779779
+  blt2_5yrs80occ |   .1033182   .0215583     4.79   0.000     .0610635     .145573
+ blt6_10yrs80occ |   .0477992   .0179901     2.66   0.008     .0125382    .0830602
+blt10_20yrs80occ |  -.0454923   .0127464    -3.57   0.000    -.0704756    -.020509
+blt20_30yrs80occ |  -.0343383   .0121936    -2.82   0.005     -.058238   -.0104385
+blt30_40yrs80occ |  -.0043435   .0194385    -0.22   0.823    -.0424433    .0337563
+  blt40_yrs80occ |          0  (omitted)
+     detach80occ |  -.0742179   .0105164    -7.06   0.000    -.0948302   -.0536056
+     mobile80occ |   .2029946   .0214157     9.48   0.000     .1610193    .2449698
+        pop_den8 |   6.57e-06   2.42e-07    27.17   0.000     6.10e-06    7.04e-06
+         shrblk8 |  -.0832202   .0111468    -7.47   0.000    -.1050682   -.0613722
+         shrhsp8 |  -.0429568    .017936    -2.40   0.017    -.0781117   -.0078019
+          child8 |  -.4328709   .0405008   -10.69   0.000    -.5122533   -.3534885
+            old8 |  -.2324004   .0346932    -6.70   0.000    -.3003997   -.1644011
+         shrfor8 |   .5979861   .0288646    20.72   0.000     .5414109    .6545613
+            ffh8 |  -.1067278   .0239865    -4.45   0.000    -.1537419   -.0597137
+          smhse8 |   .3521599   .0183301    19.21   0.000     .3162326    .3880872
+         hsdrop8 |   .0302039   .0177853     1.70   0.089    -.0046557    .0650635
+  no_hs_diploma8 |   -.338446   .0265065   -12.77   0.000    -.3903993   -.2864926
+   ba_or_better8 |    .467404   .0271184    17.24   0.000     .4142514    .5205567
+        unemprt8 |  -1.341214   .0561625   -23.88   0.000    -1.451294   -1.231135
+         povrat8 |  -.0495399   .0357748    -1.38   0.166    -.1196591    .0205794
+        welfare8 |   .2515263   .0478542     5.26   0.000     .1577312    .3453215
+         avhhin8 |    .000014   3.11e-07    44.96   0.000     .0000134    .0000146
+        tothsun8 |   .0000275   2.76e-06     9.97   0.000     .0000221    .0000329
+         ownocc8 |  -.0000872   5.16e-06   -16.90   0.000    -.0000973   -.0000771
+      occupied80 |  -.0424509   .0312214    -1.36   0.174    -.1036454    .0187437
+           _cons |   6.334669   .0763636    82.95   0.000     6.184995    6.484343
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+   statefips |        49           0          49     |
+-----------------------------------------------------+
+
+. est sto m4
+
+. 
+. // Tabulate the regression results
+.           
+. #delimit;
+delimiter now ;
+.         esttab m1 m2 m3 m4 using "$hbpdir/Build/reg_results_table.tex", 
+>         se r2 
+>         coeflabel(npl2000 "House Price Coefficient")
+>         nonumber 
+>         title("Measuring the impact of Superfund cleanup on local housing prices")
+>         mtitle("Model 1" "Model 2" "Model 3" "Model 4")
+>         b(%9.3f) t(%9.3f) r2(%9.5f) 
+>         keep(npl2000)
+>         //drop(`price_control' `house_controls' `economic_controls')
+>         addnote("Model 1: Only price controls" "Model 2: Price and house controls"
+>         "Model: 3 Price, house and economic controls" 
+>         "Model 4: Price, house and economic controls, and fixed effects")
+>         replace ;
+(output written to C:\Users\Tom Bearpark\Documents\Data_Task\tom_epic_task/Build/reg_results_table.tex)
+
+. #delimit cr
+delimiter now cr
+. 
+. 
+. /* Results show that is a positive association between NPL status in 2000 
+> house prices in that year. This is robust to all specifications tried./*
+
+end of do-file
+
+. exit, clear
